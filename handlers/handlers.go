@@ -1,10 +1,13 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"log"
 	"net/http"
+	"rpsweb/rps"
+	"strconv"
 )
 
 type Player struct {
@@ -49,7 +52,16 @@ func Game(w http.ResponseWriter, r *http.Request) {
 }
 
 func Play(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "Jugar")
+	playerChoice, _ := strconv.Atoi(r.URL.Query().Get("c"))
+	result := rps.PlayRound(playerChoice)
+
+	out, err := json.MarshalIndent(result, "", "	")
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(out)
 }
 
 func About(w http.ResponseWriter, r *http.Request) {
