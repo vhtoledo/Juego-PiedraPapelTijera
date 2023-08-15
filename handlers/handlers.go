@@ -19,10 +19,12 @@ const (
 )
 
 func Index(w http.ResponseWriter, r *http.Request) {
+	restartValues()
 	renderTemplate(w, "index.html", nil)
 }
 
 func NewGame(w http.ResponseWriter, r *http.Request) {
+	restartValues()
 	renderTemplate(w, "new-game.html", nil)
 }
 
@@ -38,6 +40,11 @@ func Game(w http.ResponseWriter, r *http.Request) {
 		player.Name = r.Form.Get("name");
 	}
 
+	// Redireccionar a otra ruta 
+	if player.Name == "" {
+		http.Redirect(w, r, "/new", http.StatusFound)
+	}
+
 	renderTemplate(w, "game.html", player)
 }
 
@@ -46,6 +53,7 @@ func Play(w http.ResponseWriter, r *http.Request) {
 }
 
 func About(w http.ResponseWriter, r *http.Request) {
+	restartValues()
 	renderTemplate(w, "about.html", nil)
 }
 
@@ -58,4 +66,9 @@ func renderTemplate(w http.ResponseWriter, page string, data any){
 		log.Println(err)
 		return
 	}
+}
+
+// Reiniciar valores
+func restartValues(){
+	player.Name=""
 }
