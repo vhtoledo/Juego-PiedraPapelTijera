@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
+	//"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -83,4 +83,6 @@ func renderTemplate(w http.ResponseWriter, page string, data any){
 // Reiniciar valores
 func restartValues(){
 	player.Name=""
+	rps.ComputerScore = 0
+	rps.PlayerScore = 0
 }
